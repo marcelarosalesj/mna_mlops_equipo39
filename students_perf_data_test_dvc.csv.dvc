@@ -1,0 +1,5 @@
+outs:
+- md5: 0202da532f55f9579f788a0d5e48399a
+  size: 21936
+  hash: md5
+  path: students_perf_data_test_dvc.csv
