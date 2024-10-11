@@ -123,6 +123,48 @@ dvc checkout
 
 This command ensures that the dataset version linked to the specific .dvc file is pulled from the remote storage.
 
-```bash
 
+## Appendix: Setting Up DVC with Google Drive
+This section outlines how DVC was configured to use Google Drive as the remote storage for datasets.
+
+Step-by-Step DVC Setup with Google Drive
+1. Install DVC and the Google Drive Plugin
+First, make sure DVC and the Google Drive plugin are installed in your environment:
+
+```bash
+pip install dvc
+pip install 'dvc[gdrive]'
 ```
+
+2. Initialize DVC in the Project
+Initialize DVC in the local repository (this step only needs to be done once, typically by the person setting up the project):
+
+```bash
+dvc init
+```
+This creates a .dvc/ folder in the repository, which contains metadata for managing datasets.
+
+3. Configure Google Drive as the Remote Storage
+Set up Google Drive as the default remote for storing datasets. This allows DVC to push datasets to Google Drive and pull them later. Run the following command to configure the remote:
+
+```bash
+dvc remote add -d gdrive_storage gdrive://<Google-Drive-Folder-ID>
+```
+Replace <Google-Drive-Folder-ID> with the actual ID of the folder you want to use in Google Drive.
+
+4. Set Google Drive Client Credentials
+To allow DVC to access Google Drive, you need to provide your Google OAuth Client ID and Client Secret. These are required for authentication and authorizing DVC to push and pull datasets from Google Drive.
+
+Run the following commands to add your Google Drive credentials:
+
+```bash
+dvc remote modify gdrive_storage gdrive_client_id 'your-client-id'
+dvc remote modify gdrive_storage gdrive_client_secret 'your-client-secret'
+```
+Replace 'your-client-id' with the actual Client ID.
+Replace 'your-client-secret' with the actual Client Secret.
+
+To allow Google Drive storage you need to fololow the instructions outlined in the DVC documentation:
+[Documentation here](https://dvc.org/doc/user-guide/data-management/remote-storage/google-drive#using-a-custom-google-cloud-project-recommended)
+
+The documentation explains how to set an OAuth connection through google drive API.
