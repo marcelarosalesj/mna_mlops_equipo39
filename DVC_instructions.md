@@ -2,7 +2,7 @@
 
 ## Step-by-Step Guide for Using DVC in the Project
 
-## To retrieve all files your team is tracking with DVC, a teammate would:
+## To retrieve all files our team is tracking with DVC, you could:
 
 1. Clone the repository from GitHub:
 
@@ -34,10 +34,11 @@ pip install 'dvc[gdrive]'
 dvc remote add -d gdrive_storage gdrive://1XDzpeNIrwyg9sMHpmKM5Z4eDxrdRlPEG
 ```
 
-Add the Gdrive credentials
+4. Add the Gdrive credentials
+
 ```bash
-dvc remote modify gdrive_storage gdrive_client_id '647670916535-0t026mcb74agt85fnq1njm95vn796slt.apps.googleusercontent.com'
-dvc remote modify gdrive_storage gdrive_client_secret ''
+dvc remote modify gdrive_storage gdrive_client_id '647670916535-0t026mcb74agt85fnq1njm95vn796slt.apps.googleusercontent.com' --local
+dvc remote modify gdrive_storage gdrive_client_secret '' --local
 ```
 
 Check DVC Remote Configuration (Google connection)
@@ -47,7 +48,7 @@ dvc remote list
 ```
 
 
-4. You can proceed to pull the DVC-tracked files from the remote storage (Google Drive)
+5. You can proceed to pull the DVC-tracked files from the remote storage (Google Drive)
 ```bash
 dvc pull
 
@@ -72,7 +73,8 @@ The dataset itself is not stored in Git, only the metadata (.dvc file) that tell
 
 Push the metadata to GitHub:
 ```bash
-git push
+git remote add origin https://github.com/marcelarosalesj/mna_mlops_equipo39
+git push -u origin main
 ```
 
 Push data to remote (Google Drive): To upload the dataset to Google Drive, use:
