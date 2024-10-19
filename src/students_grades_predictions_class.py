@@ -37,6 +37,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.model_selection import train_test_split
@@ -147,15 +148,13 @@ class StudentPerformanceModel:
         #    self.experiment_id = experiment.experiment_id
 
         # mlflow.set_tracking_uri("http://127.0.0.1:5000")
-        Student_Performance_experiment = mlflow.set_experiment("TEST7")
+        Student_Performance_experiment = mlflow.set_experiment("Student_Performance_Models")
 
         # mlflow.set_tags(experiment_tags)
 
     def load_data(self):
-        fetched_data = fetch_ucirepo(id=self.dataset_id)
-        self.data = pd.concat(
-            [fetched_data.data.features, fetched_data.data.targets], axis=1
-        )
+        #fetched_data = fetch_ucirepo(id=self.dataset_id)
+        self.data = pd.read_csv(r'C:\Users\Victor\Downloads\resampled_adasyn_DATA_students_predictions.csv')
 
         column_names = [
             "Student Age",
@@ -324,12 +323,20 @@ class StudentPerformanceModel:
         self.model.fit(self.X_train, self.y_train)
         return self
 
-    def train_model_rf(self, n_estimators=200, max_depth=10):
-        self.model = RandomForestClassifier(
-          max_features='sqrt', min_samples_split=5, min_samples_leaf=2, n_estimators=n_estimators, max_depth=max_depth, random_state=0
-        )
-        self.model_name = "Random Forest"
+    def train_model_rf(self, n_estimators=100, max_depth=None, class_weights={0: 1, 1: 5, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1}):
+        self.model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, class_weight=class_weights, random_state=0)
+        self.model_name = "Random Forest - ADASYN db"
         self.model.fit(self.X_train, self.y_train)
+        return self
+    
+    def train_model_xgb(self, n_estimators=100, max_depth=3, class_weights={0: 1, 1: 10, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1}):
+        # Create the XGBoost model
+        self.model = XGBClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=0)
+        self.model_name = "XGBoost - ADASYN db"
+        # Convert class weights to sample weights
+        sample_weights = [class_weights[label] for label in self.y_train]
+        # Fit the model to the training data
+        self.model.fit(self.X_train, self.y_train, sample_weight=sample_weights)
         return self
 
     def evaluate_model(
