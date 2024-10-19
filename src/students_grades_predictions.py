@@ -10,7 +10,7 @@ model.preprocess_data()
 # students_grades_predictions_class.DataExplorer.plot_categorical_distributions(model.X_train, model.data.columns[:-1], model.y_train) # def plot_categorical_distributions(data, columns, target)
 
 # Modelling and processing
-model.encode_target().build_pipeline().apply_pipeline().train_model_knn().evaluate_model(
+model.encode_target().build_pipeline().apply_pipeline().train_model_rf().evaluate_model(
     "test"
 ).cross_validate_model()
 

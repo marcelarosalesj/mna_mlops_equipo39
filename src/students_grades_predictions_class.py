@@ -324,9 +324,9 @@ class StudentPerformanceModel:
         self.model.fit(self.X_train, self.y_train)
         return self
 
-    def train_model_rf(self, n_estimators=100, max_depth=None):
+    def train_model_rf(self, n_estimators=200, max_depth=10):
         self.model = RandomForestClassifier(
-            n_estimators=n_estimators, max_depth=max_depth, random_state=0
+          max_features='sqrt', min_samples_split=5, min_samples_leaf=2, n_estimators=n_estimators, max_depth=max_depth, random_state=0
         )
         self.model_name = "Random Forest"
         self.model.fit(self.X_train, self.y_train)
