@@ -1,11 +1,13 @@
-from numpy import save
 from ucimlrepo import fetch_ucirepo
 
 import pandas as pd
 
 
-def load_data(dataset_id: int, save_path="loaded_data.csv"):
-    fetched_data = fetch_ucirepo(id=dataset_id)
+def load_data(config_params):
+    """
+    read dataset for student grade prediction and save as CSV file
+    """
+    fetched_data = fetch_ucirepo(id=856)
     data = pd.concat([fetched_data.data.features, fetched_data.data.targets], axis=1)
 
     column_names = [
@@ -43,6 +45,5 @@ def load_data(dataset_id: int, save_path="loaded_data.csv"):
         "OUTPUT Grade",
     ]
     data.columns = column_names
-    data.to_csv(save_path)
 
-    return data
+    data.to_csv(config_params["load_data"]["dataset_csv"])
