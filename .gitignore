@@ -1,2 +1,5 @@
 /students_perf_data_test_dvc.csv
 .dvc/config.local
+mlruns
+venv
+notebooks/.ipynb_checkpoints/
