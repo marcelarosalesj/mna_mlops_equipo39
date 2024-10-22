@@ -47,3 +47,4 @@ def load_data(config_params):
     data.columns = column_names
 
     data.to_csv(config_params["load_data"]["dataset_csv"])
+    print(f"Done saving artifacts")
