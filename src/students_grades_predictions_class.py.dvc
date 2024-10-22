@@ -1,5 +1,0 @@
-outs:
-- md5: 74447334bc815c4e1bc469b1319a3063
-  size: 10493
-  hash: md5
-  path: students_grades_predictions_class.py
