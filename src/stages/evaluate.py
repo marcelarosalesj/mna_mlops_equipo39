@@ -1,4 +1,5 @@
 import pickle
+import argparse
 import numpy as np
 import pandas as pd
 from sklearn.metrics import (
@@ -8,6 +9,8 @@ from sklearn.metrics import (
 )
 from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.model_selection import cross_val_score
+
+from src.utils import read_config_params
 
 
 def _get_model(config_params):
@@ -60,3 +63,13 @@ def cross_validate_model(config_params):
         f"Accuracy con validacion cruzada del conjunto de entrenamiento: {np.mean(scores):.4f}"
     )
     return scores
+
+
+if __name__ == "__main__":
+    args_parser = argparse.ArgumentParser()
+    args_parser.add_argument("--config", dest="config", required=True)
+    args = args_parser.parse_args()
+
+    params = read_config_params(args.config)
+
+    evaluate_model(params)

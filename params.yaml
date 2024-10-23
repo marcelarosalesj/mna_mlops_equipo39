@@ -18,11 +18,11 @@ features:
   features_val_dataset: "artifacts/features_val_dataset.csv"
 
 train:
+  # Save the trained model here
+  model_path: "artifacts/model_test1.pkl"
   model_name: "StudentGradePrediction KNN"
   algo: "knn"
   n_neighbors: 11
   algorithm: "auto"
   metric: "manhattan"
   weights: "distance"
-  # Save the trained model here
-  model_path: "artifacts/model_test1.pkl"

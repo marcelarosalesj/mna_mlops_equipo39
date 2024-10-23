@@ -1,6 +1,8 @@
+import argparse
+import pandas as pd
 from ucimlrepo import fetch_ucirepo
 
-import pandas as pd
+from src.utils import read_config_params
 
 
 def load_data(config_params):
@@ -49,4 +51,14 @@ def load_data(config_params):
     print(f"Shape of initial dataset {data.shape}")
 
     data.to_csv(config_params["load_data"]["dataset_csv"], index=False)
-    print(f"Done saving artifacts")
+    print("Done saving artifacts")
+
+
+if __name__ == "__main__":
+    args_parser = argparse.ArgumentParser()
+    args_parser.add_argument("--config", dest="config", required=True)
+    args = args_parser.parse_args()
+
+    params = read_config_params(args.config)
+
+    load_data(params)

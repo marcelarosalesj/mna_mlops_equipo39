@@ -1,8 +1,11 @@
+import argparse
 import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder, OrdinalEncoder
+
+from src.utils import read_config_params
 
 
 def _encode_target(y_train, y_test, y_val):
@@ -125,3 +128,13 @@ def features_transform(config_params):
     df_test.to_csv(config_params["features"]["features_test_dataset"], index=False)
     df_val.to_csv(config_params["features"]["features_val_dataset"], index=False)
     print("Done saving artifacts")
+
+
+if __name__ == "__main__":
+    args_parser = argparse.ArgumentParser()
+    args_parser.add_argument("--config", dest="config", required=True)
+    args = args_parser.parse_args()
+
+    params = read_config_params(args.config)
+
+    features_transform(params)

@@ -1,5 +1,8 @@
+import argparse
 import pandas as pd
 from sklearn.model_selection import train_test_split
+
+from src.utils import read_config_params
 
 
 def split_data(config_params):
@@ -38,3 +41,13 @@ def split_data(config_params):
     df_test.to_csv(config_params["split_data"]["test_dataset_path"], index=False)
     df_val.to_csv(config_params["split_data"]["val_dataset_path"], index=False)
     print("Done saving artifacts")
+
+
+if __name__ == "__main__":
+    args_parser = argparse.ArgumentParser()
+    args_parser.add_argument("--config", dest="config", required=True)
+    args = args_parser.parse_args()
+
+    params = read_config_params(args.config)
+
+    split_data(params)
