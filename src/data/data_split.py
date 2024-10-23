@@ -37,4 +37,4 @@ def split_data(config_params):
     df_train.to_csv(config_params["split_data"]["train_dataset_path"])
     df_test.to_csv(config_params["split_data"]["test_dataset_path"])
     df_val.to_csv(config_params["split_data"]["val_dataset_path"])
-    print(f"Done saving artifacts")
+    print("Done saving artifacts")

@@ -2,5 +2,8 @@
 .dvc/config.local
 mlruns
 venv
+.ipynb_checkpoints/
 notebooks/.ipynb_checkpoints/
 __pycache__
+.env
+artifacts/
