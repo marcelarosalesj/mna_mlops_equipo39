@@ -15,6 +15,8 @@ git clone git@github.com:marcelarosalesj/mna_mlops_equipo39.git
 
 cd mna_mlops_equipo39
 
+# git checkout refactor # make sure you're on this branch
+
 python3 -m venv venv
 
 source venv/bin/activate
