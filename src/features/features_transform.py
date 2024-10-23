@@ -121,7 +121,7 @@ def features_transform(config_params):
     print(f"shapes for test -> {test_dataset.shape}")
     print(f"shapes for val -> {val_dataset.shape}")
 
-    df_train.to_csv(config_params["features"]["features_train_dataset"])
-    df_test.to_csv(config_params["features"]["features_test_dataset"])
-    df_val.to_csv(config_params["features"]["features_val_dataset"])
+    df_train.to_csv(config_params["features"]["features_train_dataset"], index=False)
+    df_test.to_csv(config_params["features"]["features_test_dataset"], index=False)
+    df_val.to_csv(config_params["features"]["features_val_dataset"], index=False)
     print("Done saving artifacts")

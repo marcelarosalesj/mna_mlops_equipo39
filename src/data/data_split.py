@@ -34,7 +34,7 @@ def split_data(config_params):
     df_test = X_test.merge(y_test, left_index=True, right_index=True)
     df_val = X_val.merge(y_val, left_index=True, right_index=True)
 
-    df_train.to_csv(config_params["split_data"]["train_dataset_path"])
-    df_test.to_csv(config_params["split_data"]["test_dataset_path"])
-    df_val.to_csv(config_params["split_data"]["val_dataset_path"])
+    df_train.to_csv(config_params["split_data"]["train_dataset_path"], index=False)
+    df_test.to_csv(config_params["split_data"]["test_dataset_path"], index=False)
+    df_val.to_csv(config_params["split_data"]["val_dataset_path"], index=False)
     print("Done saving artifacts")

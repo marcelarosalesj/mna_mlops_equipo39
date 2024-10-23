@@ -45,6 +45,8 @@ def load_data(config_params):
         "OUTPUT Grade",
     ]
     data.columns = column_names
+    print(f"Number of features in dataset: {len(column_names)}")
+    print(f"Shape of initial dataset {data.shape}")
 
-    data.to_csv(config_params["load_data"]["dataset_csv"])
+    data.to_csv(config_params["load_data"]["dataset_csv"], index=False)
     print(f"Done saving artifacts")
