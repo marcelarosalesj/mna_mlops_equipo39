@@ -1,3 +1,4 @@
+import json
 import pickle
 import argparse
 import numpy as np
@@ -45,9 +46,16 @@ def evaluate_model(config_params):
     print(f"Accuracy = {accuracy}")
     print(f"MSE = {mse}")
     print(f"RMSE = {rmse}")
-    ConfusionMatrixDisplay(confusion_matrix=cm).plot(cmap="Blues")
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm).plot(cmap="Blues")
+    disp.plot().figure_.savefig(config_params["evaluate"]["cm_file"])
 
-    return accuracy, mse, rmse, cm
+    metrics = {
+        "accuracy": accuracy,
+        "mse": mse,
+        "rmse": rmse,
+    }
+    with open(config_params["evaluate"]["metrics_file"], "w") as ff:
+        json.dump(metrics, ff)
 
 
 def cross_validate_model(config_params):

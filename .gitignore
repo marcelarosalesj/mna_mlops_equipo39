@@ -7,3 +7,4 @@ notebooks/.ipynb_checkpoints/
 __pycache__
 .env
 artifacts/
+*.csv

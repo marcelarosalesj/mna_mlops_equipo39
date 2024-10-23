@@ -1,0 +1,160 @@
+schema: '2.0'
+stages:
+  data_load:
+    cmd: python src/stages/data_load.py --config=params.yaml
+    deps:
+    - path: src/stages/data_load.py
+      hash: md5
+      md5: a2dadce21bb40c86f5611523c7476194
+      size: 1899
+    params:
+      params.yaml:
+        load_data:
+          dataset_csv: artifacts/downloaded_dataset.csv
+    outs:
+    - path: artifacts/downloaded_dataset.csv
+      hash: md5
+      md5: 939e49db4a1d26c3906162b456075ae9
+      size: 9937
+  data_split:
+    cmd: python src/stages/data_split.py --config=params.yaml
+    deps:
+    - path: artifacts/downloaded_dataset.csv
+      hash: md5
+      md5: 939e49db4a1d26c3906162b456075ae9
+      size: 9937
+    - path: src/stages/data_split.py
+      hash: md5
+      md5: 8eb5e3cff543cd36a2c1c6bd86ece6ca
+      size: 1888
+    params:
+      params.yaml:
+        split_data:
+          train_proportion: 0.7
+          val_proportion_wrt_test: 0.5
+          random_state: 12
+          train_dataset_path: artifacts/split_train_dataset.csv
+          test_dataset_path: artifacts/split_test_dataset.csv
+          val_dataset_path: artifacts/split_val_dataset.csv
+    outs:
+    - path: artifacts/split_test_dataset.csv
+      hash: md5
+      md5: 54fc811767361c5cb9da4939de9e765a
+      size: 2065
+    - path: artifacts/split_train_dataset.csv
+      hash: md5
+      md5: 97eb6493105574892ab831b26ed6b3de
+      size: 7121
+    - path: artifacts/split_val_dataset.csv
+      hash: md5
+      md5: 6ee2dfd638f8bdc32e3f819a16dbc7a1
+      size: 2065
+  features_transform:
+    cmd: python src/stages/features_transform.py --config=params.yaml
+    deps:
+    - path: artifacts/split_test_dataset.csv
+      hash: md5
+      md5: 54fc811767361c5cb9da4939de9e765a
+      size: 2065
+    - path: artifacts/split_train_dataset.csv
+      hash: md5
+      md5: 97eb6493105574892ab831b26ed6b3de
+      size: 7121
+    - path: artifacts/split_val_dataset.csv
+      hash: md5
+      md5: 6ee2dfd638f8bdc32e3f819a16dbc7a1
+      size: 2065
+    - path: src/stages/features_transform.py
+      hash: md5
+      md5: 63487e080109d28c6625fba2092ca69b
+      size: 4245
+    params:
+      params.yaml:
+        features:
+          features_train_dataset: artifacts/features_train_dataset.csv
+          features_test_dataset: artifacts/features_test_dataset.csv
+          features_val_dataset: artifacts/features_val_dataset.csv
+    outs:
+    - path: artifacts/features_test_dataset.csv
+      hash: md5
+      md5: 486b0f8d5cccfa5deeed0e72fe9e5c5c
+      size: 5723
+    - path: artifacts/features_train_dataset.csv
+      hash: md5
+      md5: 732be5404fdba953b017f81b60719c4e
+      size: 25631
+    - path: artifacts/features_val_dataset.csv
+      hash: md5
+      md5: bdaa307c8b7dfe1e917e948b7b0b30d3
+      size: 5723
+  train:
+    cmd: python src/stages/train_model.py --config=params.yaml
+    deps:
+    - path: artifacts/features_test_dataset.csv
+      hash: md5
+      md5: 486b0f8d5cccfa5deeed0e72fe9e5c5c
+      size: 5723
+    - path: artifacts/features_train_dataset.csv
+      hash: md5
+      md5: 732be5404fdba953b017f81b60719c4e
+      size: 25631
+    - path: artifacts/features_val_dataset.csv
+      hash: md5
+      md5: bdaa307c8b7dfe1e917e948b7b0b30d3
+      size: 5723
+    - path: src/stages/train_model.py
+      hash: md5
+      md5: a8ca785ea0ce1ce941c8e43de9cdc088
+      size: 1387
+    params:
+      params.yaml:
+        train:
+          model_path: artifacts/model_test1.pkl
+          model_name: StudentGradePrediction KNN
+          algo: knn
+          n_neighbors: 11
+          algorithm: auto
+          metric: manhattan
+          weights: distance
+    outs:
+    - path: artifacts/model_test1.pkl
+      hash: md5
+      md5: bbef111373d3bb6f765eb5b48ef0c0ad
+      size: 51995
+  evaluate:
+    cmd: python src/stages/evaluate.py --config=params.yaml
+    deps:
+    - path: artifacts/features_test_dataset.csv
+      hash: md5
+      md5: 486b0f8d5cccfa5deeed0e72fe9e5c5c
+      size: 5723
+    - path: artifacts/features_train_dataset.csv
+      hash: md5
+      md5: 732be5404fdba953b017f81b60719c4e
+      size: 25631
+    - path: artifacts/features_val_dataset.csv
+      hash: md5
+      md5: bdaa307c8b7dfe1e917e948b7b0b30d3
+      size: 5723
+    - path: artifacts/model_test1.pkl
+      hash: md5
+      md5: bbef111373d3bb6f765eb5b48ef0c0ad
+      size: 51995
+    - path: src/stages/evaluate.py
+      hash: md5
+      md5: c1976ad1e7a69217e5f6dfe54035f549
+      size: 2339
+    params:
+      params.yaml:
+        evaluate:
+          metrics_file: artifacts/metrics.json
+          cm_file: artifacts/confusion_matrix.png
+    outs:
+    - path: artifacts/confusion_matrix.png
+      hash: md5
+      md5: 4fd3369c4ca239cddcbb9a472e917771
+      size: 21580
+    - path: artifacts/metrics.json
+      hash: md5
+      md5: 1803ad9b5f10a20a9ec665ada339535c
+      size: 87

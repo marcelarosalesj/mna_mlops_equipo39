@@ -26,3 +26,7 @@ train:
   algorithm: "auto"
   metric: "manhattan"
   weights: "distance"
+
+evaluate:
+  metrics_file: "artifacts/metrics.json"
+  cm_file: "artifacts/confusion_matrix.png"
