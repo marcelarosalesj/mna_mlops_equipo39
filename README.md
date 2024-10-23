@@ -15,11 +15,15 @@ git clone git@github.com:marcelarosalesj/mna_mlops_equipo39.git
 
 cd mna_mlops_equipo39
 
-python -m venv venv
+python3 -m venv venv
 
 source venv/bin/activate
 
 pip install -r requirements.txt
 
 export PYTHONPATH=$PYTHONPATH:$(pwd)
+
+mkdir artifacts
+
+dvc repro
 ```
