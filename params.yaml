@@ -7,7 +7,7 @@ load_data:
 split_data:
   train_proportion: 0.7
   val_proportion_wrt_test: 0.5
-  random_state: 42
+  random_state: 12
   train_dataset_path: "artifacts/split_train_dataset.csv"
   test_dataset_path: "artifacts/split_test_dataset.csv"
   val_dataset_path: "artifacts/split_val_dataset.csv"
