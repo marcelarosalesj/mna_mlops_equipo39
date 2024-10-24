@@ -109,18 +109,17 @@ stages:
     params:
       params.yaml:
         train:
+          model_name: SGP
+          algo: rf
           model_path: artifacts/model_test1.pkl
-          model_name: StudentGradePrediction KNN
-          algo: knn
-          n_neighbors: 11
-          algorithm: auto
-          metric: manhattan
-          weights: distance
+          n_estimators: 100
+          max_depth: 6
+          random_state: 12
     outs:
     - path: artifacts/model_test1.pkl
       hash: md5
-      md5: bbef111373d3bb6f765eb5b48ef0c0ad
-      size: 51995
+      md5: a52fdb9fe4cd6a4e6f211f4c1bcd1e79
+      size: 736048
   evaluate:
     cmd: python src/stages/evaluate.py --config=params.yaml
     deps:
@@ -138,8 +137,8 @@ stages:
       size: 5723
     - path: artifacts/model_test1.pkl
       hash: md5
-      md5: bbef111373d3bb6f765eb5b48ef0c0ad
-      size: 51995
+      md5: a52fdb9fe4cd6a4e6f211f4c1bcd1e79
+      size: 736048
     - path: src/stages/evaluate.py
       hash: md5
       md5: c1976ad1e7a69217e5f6dfe54035f549
@@ -152,9 +151,9 @@ stages:
     outs:
     - path: artifacts/confusion_matrix.png
       hash: md5
-      md5: 4fd3369c4ca239cddcbb9a472e917771
-      size: 21580
+      md5: 0e91a200e03464f1880ef8ff8bcea43c
+      size: 21418
     - path: artifacts/metrics.json
       hash: md5
-      md5: 1803ad9b5f10a20a9ec665ada339535c
-      size: 87
+      md5: 49e0194f3ddeb689c13f9b154d92741e
+      size: 86
