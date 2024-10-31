@@ -88,13 +88,10 @@ def _encode_features(X_train, X_test, X_val):
     return X_train, X_test, X_val
 
 
-def features_transform(config_params, dvc_enabled=True):
+def features_transform(df_train, df_test, df_val):
     """
     Aplicando el pipeline al conjunto de train, val y test
     """
-    df_train = pd.read_csv(config_params["split_data"]["train_dataset_path"])
-    df_test = pd.read_csv(config_params["split_data"]["test_dataset_path"])
-    df_val = pd.read_csv(config_params["split_data"]["val_dataset_path"])
 
     target_column = "OUTPUT Grade"
 
@@ -114,7 +111,7 @@ def features_transform(config_params, dvc_enabled=True):
     test_dataset = np.column_stack([X_test, y_test])
     val_dataset = np.column_stack([X_val, y_val])
 
-    print(f"finish transformations")
+    print("finish transformations")
 
     df_train = pd.DataFrame(train_dataset)
     df_test = pd.DataFrame(test_dataset)
@@ -124,23 +121,31 @@ def features_transform(config_params, dvc_enabled=True):
     print(f"shapes for test -> {test_dataset.shape}")
     print(f"shapes for val -> {val_dataset.shape}")
 
-    if dvc_enabled:
-        df_train.to_csv(
-            config_params["features"]["features_train_dataset"], index=False
-        )
-        df_test.to_csv(config_params["features"]["features_test_dataset"], index=False)
-        df_val.to_csv(config_params["features"]["features_val_dataset"], index=False)
-        print("Done saving artifacts")
-    else:
-        return df_train, df_test, df_val
+    return df_train, df_test, df_val
+
+
+def features_transform_dvc(config_params):
+    df_train = pd.read_csv(config_params["split_data"]["train_dataset_path"])
+    df_test = pd.read_csv(config_params["split_data"]["test_dataset_path"])
+    df_val = pd.read_csv(config_params["split_data"]["val_dataset_path"])
+
+    df_train, df_test, df_val = features_transform(df_train, df_test, df_val)
+
+    df_train.columns = df_train.columns.astype(str)
+    df_test.columns = df_test.columns.astype(str)
+    df_val.columns = df_val.columns.astype(str)
+
+    df_train.to_csv(config_params["features"]["features_train_dataset"], index=False)
+    df_test.to_csv(config_params["features"]["features_test_dataset"], index=False)
+    df_val.to_csv(config_params["features"]["features_val_dataset"], index=False)
+    print("Done saving artifacts")
 
 
 if __name__ == "__main__":
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument("--config", dest="config", required=True)
-    args_parser.add_argument("--dvc", dest="dvc", required=True, action="store_true")
     args = args_parser.parse_args()
 
     params = read_config_params(args.config)
 
-    features_transform(params, args.dvc)
+    features_transform_dvc(params)

@@ -20,21 +20,38 @@ def get_model(config_params):
     return model
 
 
-def evaluate_model(config_params, dvc_enabled=False):
+def cross_validate_model(config_params):
+    df_train = pd.read_csv(config_params["features"]["features_train_dataset"])
+    X_train = df_train.iloc[:, :-1]
+    y_train = df_train.iloc[:, -1:]
+    y_train = y_train[str(62)].to_numpy()  # Convert to numpy array
+
+    model = get_model(config_params)
+
+    scores = cross_val_score(model, X_train, y_train, cv=5)
+    print(
+        f"Accuracy con validacion cruzada del conjunto de entrenamiento: {np.mean(scores):.4f}"
+    )
+    return scores
+
+
+def evaluate_model(config_params, df_test, model):
     """
     evaluate model
     """
+    df_test.columns = df_test.columns.astype(str)
 
-    df_test = pd.read_csv(config_params["features"]["features_test_dataset"])
     X_test = df_test.iloc[:, :-1]
     y_test = df_test.iloc[:, -1:]
-    y_test = y_test["62"].to_numpy()  # Convert to numpy array
+    print(f"SUPER IMPORTANTES tipo de df_test {type(df_test)}")
+    print(f"tipo de X_test {type(X_test)}")
+    print(f"tipo de y_test {type(y_test)}")
+    print(f"COLUMNAS -> {y_test.columns}")
+    y_test = y_test[str(62)].to_numpy()  # Convert to numpy array
 
     # df_val = pd.read_csv(config_params["features"]["features_val_dataset"])
     # X_val = df_val.iloc[:, :-1]
     # y_val = df_val.iloc[:, -1:]
-
-    model = get_model(config_params)
 
     y_pred = model.predict(X_test)
 
@@ -46,42 +63,35 @@ def evaluate_model(config_params, dvc_enabled=False):
     print(f"Accuracy = {accuracy}")
     print(f"MSE = {mse}")
     print(f"RMSE = {rmse}")
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm).plot(cmap="Blues")
-    disp.plot().figure_.savefig(config_params["evaluate"]["cm_file"])
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm)  # .plot(cmap="Blues")
 
     metrics = {
         "accuracy": accuracy,
         "mse": mse,
         "rmse": rmse,
     }
-    if dvc_enabled:
-        with open(config_params["evaluate"]["metrics_file"], "w") as ff:
-            json.dump(metrics, ff)
-    else:
-        return metrics
+
+    return metrics, disp
 
 
-def cross_validate_model(config_params):
-    df_train = pd.read_csv(config_params["features"]["features_train_dataset"])
-    X_train = df_train.iloc[:, :-1]
-    y_train = df_train.iloc[:, -1:]
-    y_train = y_train["62"].to_numpy()  # Convert to numpy array
-
+def evaluate_model_dvc(config_params):
+    df_test = pd.read_csv(config_params["features"]["features_test_dataset"])
     model = get_model(config_params)
 
-    scores = cross_val_score(model, X_train, y_train, cv=5)
-    print(
-        f"Accuracy con validacion cruzada del conjunto de entrenamiento: {np.mean(scores):.4f}"
-    )
-    return scores
+    metrics, disp = evaluate_model(config_params, df_test, model)
+
+    disp.plot(cmap="Blues").figure_.savefig(config_params["evaluate"]["cm_file"])
+
+    with open(config_params["evaluate"]["metrics_file"], "w") as ff:
+        json.dump(metrics, ff)
+    print("Metrics saved")
 
 
 if __name__ == "__main__":
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument("--config", dest="config", required=True)
-    args_parser.add_argument("--dvc", dest="dvc", required=True, action="store_true")
     args = args_parser.parse_args()
 
     params = read_config_params(args.config)
 
-    evaluate_model(params, args.dvc)
+    evaluate_model_dvc(params)

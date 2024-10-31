@@ -5,7 +5,7 @@ from ucimlrepo import fetch_ucirepo
 from src.utils import read_config_params
 
 
-def load_data(config_params, dvc_enabled=False):
+def load_data():
     """
     read dataset for student grade prediction and save as CSV file
     """
@@ -50,19 +50,21 @@ def load_data(config_params, dvc_enabled=False):
     print(f"Number of features in dataset: {len(column_names)}")
     print(f"Shape of initial dataset {data.shape}")
 
-    if dvc_enabled:
-        data.to_csv(config_params["load_data"]["dataset_csv"], index=False)
-        print("Done saving artifacts")
-    else:
-        return data
+    return data
+
+
+def load_data_dvc(config_params):
+    data = load_data()
+    data.columns = data.columns.astype(str)
+    data.to_csv(config_params["load_data"]["dataset_csv"], index=False)
+    print("Done saving artifacts")
 
 
 if __name__ == "__main__":
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument("--config", dest="config", required=True)
-    args_parser.add_argument("--dvc", dest="dvc", required=True, action="store_true")
     args = args_parser.parse_args()
 
     params = read_config_params(args.config)
 
-    load_data(params, args.dvc)
+    load_data_dvc(params)

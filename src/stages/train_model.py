@@ -16,12 +16,10 @@ available_models = {
 }
 
 
-def train_model(config_params, dvc_enabled=False):
+def train_model(config_params, df_train):
     """
     train model
     """
-    df_train = pd.read_csv(config_params["features"]["features_train_dataset"])
-
     X_train = df_train.iloc[:, :-1]
     y_train = df_train.iloc[:, -1:]
     y_train = y_train.values.ravel()
@@ -40,19 +38,25 @@ def train_model(config_params, dvc_enabled=False):
 
     model.fit(X_train, y_train)
 
-    if dvc_enabled:
-        with open(model_path, "wb") as ff:
-            pickle.dump(model, ff)
-    else:
-        return model
+    return model, model_path
+
+
+def train_model_dvc(config_params):
+    df_train = pd.read_csv(config_params["features"]["features_train_dataset"])
+
+    model, model_path = train_model(config_params, df_train)
+
+    with open(model_path, "wb") as ff:
+        pickle.dump(model, ff)
+
+    print("Model saved")
 
 
 if __name__ == "__main__":
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument("--config", dest="config", required=True)
-    args_parser.add_argument("--dvc", dest="dvc", required=True, action="store_true")
     args = args_parser.parse_args()
 
     params = read_config_params(args.config)
 
-    train_model(params, args.dvc)
+    train_model_dvc(params)
