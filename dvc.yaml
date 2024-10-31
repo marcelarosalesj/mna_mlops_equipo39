@@ -1,0 +1,57 @@
+stages:
+  data_load:
+    cmd: python src/stages/data_load.py --config=params.yaml
+    deps:
+    - src/stages/data_load.py
+    params:
+    - load_data
+    outs:
+    - artifacts/downloaded_dataset.csv
+  data_split:
+    cmd: python src/stages/data_split.py --config=params.yaml
+    deps:
+    - src/stages/data_split.py
+    - artifacts/downloaded_dataset.csv
+    params:
+    - split_data
+    outs:
+    - artifacts/split_train_dataset.csv
+    - artifacts/split_test_dataset.csv
+    - artifacts/split_val_dataset.csv
+  features_transform:
+    cmd: python src/stages/features_transform.py --config=params.yaml
+    deps:
+    - src/stages/features_transform.py
+    - artifacts/split_train_dataset.csv
+    - artifacts/split_test_dataset.csv
+    - artifacts/split_val_dataset.csv
+    params:
+    - features
+    outs:
+    - artifacts/features_test_dataset.csv
+    - artifacts/features_train_dataset.csv
+    - artifacts/features_val_dataset.csv
+  train:
+    cmd: python src/stages/train_model.py --config=params.yaml
+    deps:
+    - src/stages/train_model.py
+    - artifacts/features_test_dataset.csv
+    - artifacts/features_train_dataset.csv
+    - artifacts/features_val_dataset.csv
+    params:
+    - train
+    outs:
+    - artifacts/model_test1.pkl
+  evaluate:
+    cmd: python src/stages/evaluate.py --config=params.yaml
+    deps:
+    - src/stages/evaluate.py
+    - artifacts/model_test1.pkl
+    - artifacts/features_test_dataset.csv
+    - artifacts/features_train_dataset.csv
+    - artifacts/features_val_dataset.csv
+    params:
+    - evaluate
+    outs:
+    - artifacts/metrics.json
+    - artifacts/confusion_matrix.png

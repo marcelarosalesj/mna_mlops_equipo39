@@ -1,0 +1,48 @@
+load_data:
+  dataset_csv: "artifacts/downloaded_dataset.csv"
+
+# Train - data to train the model
+# Test - data to train the model
+# Val - data to validate that the training is working
+split_data:
+  train_proportion: 0.7
+  val_proportion_wrt_test: 0.5
+  random_state: 12
+  train_dataset_path: "artifacts/split_train_dataset.csv"
+  test_dataset_path: "artifacts/split_test_dataset.csv"
+  val_dataset_path: "artifacts/split_val_dataset.csv"
+
+features:
+  features_train_dataset: "artifacts/features_train_dataset.csv"
+  features_test_dataset: "artifacts/features_test_dataset.csv"
+  features_val_dataset: "artifacts/features_val_dataset.csv"
+
+train:
+  model_name: "SGP"
+  # Save the trained model here
+  #model_path: "artifacts/model_test1.pkl" - 0.22
+  #algo: "knn"
+  #n_neighbors: 11
+  #algorithm: "auto"
+  #metric: "manhattan"
+  #weights: "distance"
+  #
+  #model_path: "artifacts/model_test1.pkl"
+  #algo: "dt" # 0.22
+  #max_depth: 5
+  #random_state: 12
+  #ccp_alpha: 0.0
+  #criterion: "gini"
+  #max_features: 5
+  #max_leaf_nodes: 3
+  #min_samples_leaf: 1
+  #min_samples_split: 2
+  #min_weight_fraction_leaf: 0.0
+  algo: "rf" # 0.45
+  model_path: "artifacts/model_test1.pkl"
+  n_estimators: 100
+  max_depth: 6
+  random_state: 12
+evaluate:
+  metrics_file: "artifacts/metrics.json"
+  cm_file: "artifacts/confusion_matrix.png"
