@@ -35,3 +35,9 @@ dvc repro
 ```
 mlflow server --host 127.0.0.1 --port 8080
 ```
+
+# Unit tests and Integration tests
+
+```
+pytest -v tests/
+```
