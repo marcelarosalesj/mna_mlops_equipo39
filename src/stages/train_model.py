@@ -16,7 +16,7 @@ available_models = {
 }
 
 
-def train_model(config_params):
+def train_model(config_params, dvc_enabled=False):
     """
     train model
     """
@@ -39,15 +39,20 @@ def train_model(config_params):
     model = model(**train_params)
 
     model.fit(X_train, y_train)
-    with open(model_path, "wb") as ff:
-        pickle.dump(model, ff)
+
+    if dvc_enabled:
+        with open(model_path, "wb") as ff:
+            pickle.dump(model, ff)
+    else:
+        return model
 
 
 if __name__ == "__main__":
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument("--config", dest="config", required=True)
+    args_parser.add_argument("--dvc", dest="dvc", required=True, action="store_true")
     args = args_parser.parse_args()
 
     params = read_config_params(args.config)
 
-    train_model(params)
+    train_model(params, args.dvc)

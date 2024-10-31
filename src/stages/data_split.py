@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from src.utils import read_config_params
 
 
-def split_data(config_params):
+def split_data(config_params, dvc_enabled=False):
     data = pd.read_csv(config_params["load_data"]["dataset_csv"])
 
     X = data.drop("OUTPUT Grade", axis=1)
@@ -37,17 +37,21 @@ def split_data(config_params):
     df_test = X_test.merge(y_test, left_index=True, right_index=True)
     df_val = X_val.merge(y_val, left_index=True, right_index=True)
 
-    df_train.to_csv(config_params["split_data"]["train_dataset_path"], index=False)
-    df_test.to_csv(config_params["split_data"]["test_dataset_path"], index=False)
-    df_val.to_csv(config_params["split_data"]["val_dataset_path"], index=False)
-    print("Done saving artifacts")
+    if dvc_enabled:
+        df_train.to_csv(config_params["split_data"]["train_dataset_path"], index=False)
+        df_test.to_csv(config_params["split_data"]["test_dataset_path"], index=False)
+        df_val.to_csv(config_params["split_data"]["val_dataset_path"], index=False)
+        print("Done saving artifacts")
+    else:
+        return df_train, df_test, df_val
 
 
 if __name__ == "__main__":
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument("--config", dest="config", required=True)
+    args_parser.add_argument("--dvc", dest="dvc", required=True, action="store_true")
     args = args_parser.parse_args()
 
     params = read_config_params(args.config)
 
-    split_data(params)
+    split_data(params, args.dvc)

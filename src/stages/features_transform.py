@@ -88,7 +88,7 @@ def _encode_features(X_train, X_test, X_val):
     return X_train, X_test, X_val
 
 
-def features_transform(config_params):
+def features_transform(config_params, dvc_enabled=True):
     """
     Aplicando el pipeline al conjunto de train, val y test
     """
@@ -124,17 +124,23 @@ def features_transform(config_params):
     print(f"shapes for test -> {test_dataset.shape}")
     print(f"shapes for val -> {val_dataset.shape}")
 
-    df_train.to_csv(config_params["features"]["features_train_dataset"], index=False)
-    df_test.to_csv(config_params["features"]["features_test_dataset"], index=False)
-    df_val.to_csv(config_params["features"]["features_val_dataset"], index=False)
-    print("Done saving artifacts")
+    if dvc_enabled:
+        df_train.to_csv(
+            config_params["features"]["features_train_dataset"], index=False
+        )
+        df_test.to_csv(config_params["features"]["features_test_dataset"], index=False)
+        df_val.to_csv(config_params["features"]["features_val_dataset"], index=False)
+        print("Done saving artifacts")
+    else:
+        return df_train, df_test, df_val
 
 
 if __name__ == "__main__":
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument("--config", dest="config", required=True)
+    args_parser.add_argument("--dvc", dest="dvc", required=True, action="store_true")
     args = args_parser.parse_args()
 
     params = read_config_params(args.config)
 
-    features_transform(params)
+    features_transform(params, args.dvc)

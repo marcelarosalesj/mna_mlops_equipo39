@@ -14,13 +14,13 @@ from sklearn.model_selection import cross_val_score
 from src.utils import read_config_params
 
 
-def _get_model(config_params):
+def get_model(config_params):
     with open(config_params["train"]["model_path"], "rb") as ff:
         model = pickle.load(ff)
     return model
 
 
-def evaluate_model(config_params):
+def evaluate_model(config_params, dvc_enabled=False):
     """
     evaluate model
     """
@@ -34,7 +34,7 @@ def evaluate_model(config_params):
     # X_val = df_val.iloc[:, :-1]
     # y_val = df_val.iloc[:, -1:]
 
-    model = _get_model(config_params)
+    model = get_model(config_params)
 
     y_pred = model.predict(X_test)
 
@@ -54,8 +54,11 @@ def evaluate_model(config_params):
         "mse": mse,
         "rmse": rmse,
     }
-    with open(config_params["evaluate"]["metrics_file"], "w") as ff:
-        json.dump(metrics, ff)
+    if dvc_enabled:
+        with open(config_params["evaluate"]["metrics_file"], "w") as ff:
+            json.dump(metrics, ff)
+    else:
+        return metrics
 
 
 def cross_validate_model(config_params):
@@ -64,7 +67,7 @@ def cross_validate_model(config_params):
     y_train = df_train.iloc[:, -1:]
     y_train = y_train["62"].to_numpy()  # Convert to numpy array
 
-    model = _get_model(config_params)
+    model = get_model(config_params)
 
     scores = cross_val_score(model, X_train, y_train, cv=5)
     print(
@@ -76,8 +79,9 @@ def cross_validate_model(config_params):
 if __name__ == "__main__":
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument("--config", dest="config", required=True)
+    args_parser.add_argument("--dvc", dest="dvc", required=True, action="store_true")
     args = args_parser.parse_args()
 
     params = read_config_params(args.config)
 
-    evaluate_model(params)
+    evaluate_model(params, args.dvc)
