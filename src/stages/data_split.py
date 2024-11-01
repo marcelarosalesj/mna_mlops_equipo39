@@ -6,7 +6,6 @@ from src.utils import read_config_params
 
 
 def split_data(config_params, data):
-
     X = data.drop("OUTPUT Grade", axis=1)
     y = data["OUTPUT Grade"]
 

@@ -31,6 +31,8 @@ jobs:
       continue-on-error: true
     - name: Test with pytest
       run: |
-        pip install pytest pytest-cov
+        pip install -r requirements.txt
+        echo $PYTHONPATH
         export PYTHONPATH=$PYTHONPATH:$(pwd)
+        echo $PYTHONPATH
         pytest tests/ --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
