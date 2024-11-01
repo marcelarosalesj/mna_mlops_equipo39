@@ -1,6 +1,5 @@
 import argparse
 import pandas as pd
-from pandas._config import config
 from sklearn.model_selection import train_test_split
 
 from src.utils import read_config_params
