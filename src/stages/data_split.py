@@ -1,13 +1,11 @@
 import argparse
 import pandas as pd
-from pandas._config import config
 from sklearn.model_selection import train_test_split
 
 from src.utils import read_config_params
 
 
 def split_data(config_params, data):
-
     X = data.drop("OUTPUT Grade", axis=1)
     y = data["OUTPUT Grade"]
 
