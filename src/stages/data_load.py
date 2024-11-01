@@ -1,5 +1,6 @@
 import argparse
 import pandas as pd
+import os
 from ucimlrepo import fetch_ucirepo
 
 from src.utils import read_config_params
@@ -9,8 +10,15 @@ def load_data():
     """
     read dataset for student grade prediction and save as CSV file
     """
-    fetched_data = fetch_ucirepo(id=856)
-    data = pd.concat([fetched_data.data.features, fetched_data.data.targets], axis=1)
+    #fetched_data = fetch_ucirepo(id=856)
+    #data = pd.concat([fetched_data.data.features, fetched_data.data.targets], axis=1)
+
+    # Construct the path to the data file relative to the current script
+    data_path = os.path.join(os.path.dirname(__file__), "..", "..", "data", "students_perf_data_test_dvc.csv")
+    
+    # Read the CSV file into a pandas DataFrame
+    data = pd.read_csv(data_path)
+    data = data.drop(columns=['STUDENT ID'])
 
     column_names = [
         "Student Age",
