@@ -16,7 +16,7 @@ Para asegurar la consistencia y calidad del código, se implementan las siguient
 
 ### 2.2 Pre-commit Hooks
 
-Para automatizar el proceso de linting y formato, se configura un github actions que ejecuta ruff, pruebas unitarias y pruebas de integración de forma automatizada para todos los pull requests. Esto evita que el código que no cumple con los estándares sea agregado al repositorio.
+Para realizar el proceso de linting y formato, se configura un github actions que ejecuta ruff, pruebas unitarias y pruebas de integración de forma automatizada para todos los pull requests. Esto evita que el código que no cumple con los estándares sea agregado al repositorio.
 
 
 ## 3. Proceso de Revisión de Código (Code Review)
