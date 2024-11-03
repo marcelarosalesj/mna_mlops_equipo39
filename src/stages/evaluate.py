@@ -47,7 +47,8 @@ def evaluate_model(config_params, df_test, model):
     print(f"tipo de X_test {type(X_test)}")
     print(f"tipo de y_test {type(y_test)}")
     print(f"COLUMNAS -> {y_test.columns}")
-    y_test = y_test[str(62)].to_numpy()  # Convert to numpy array
+    #y_test = y_test[str(62)].to_numpy()  # Convert to numpy array
+    y_test = y_test.to_numpy()
 
     # df_val = pd.read_csv(config_params["features"]["features_val_dataset"])
     # X_val = df_val.iloc[:, :-1]
