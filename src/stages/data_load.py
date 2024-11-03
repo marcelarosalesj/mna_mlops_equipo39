@@ -10,21 +10,25 @@ def load_data():
     """
     read dataset for student grade prediction and save as CSV file
     """
+    #fetched_data = fetch_ucirepo(id=856)
+    #data = pd.concat([fetched_data.data.features, fetched_data.data.targets], axis=1)
 
     # Construct the path to the data file relative to the current script
-    data_path = os.path.join(
-        os.path.dirname(__file__), "..", "..", "data", "students_perf_data_test_dvc.csv"
-    )
+    data_path = os.path.join(os.path.dirname(__file__), "..", "..", "data", "resampled_adasyn_DATA_students_predictions.csv")
 
     if os.path.exists(data_path):
         # Read the CSV file into a pandas DataFrame
         data = pd.read_csv(data_path)
-        data = data.drop(columns=["STUDENT ID"])
+        #data = data.drop(columns=["STUDENT ID"])
     else:
         fetched_data = fetch_ucirepo(id=856)
         data = pd.concat(
             [fetched_data.data.features, fetched_data.data.targets], axis=1
         )
+    
+    # Read the CSV file into a pandas DataFrame
+    #data = pd.read_csv(data_path)
+    #data = data.drop(columns=['STUDENT ID'])  #Only required in raw data
 
     column_names = [
         "Student Age",
