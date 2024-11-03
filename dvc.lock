@@ -1,12 +1,12 @@
 schema: '2.0'
 stages:
   data_load:
-    cmd: python3 src/stages/data_load.py --config=params.yaml
+    cmd: python src/stages/data_load.py --config=params.yaml
     deps:
     - path: src/stages/data_load.py
       hash: md5
-      md5: 346fca205394e380e3693f4202248d5b
-      size: 2338
+      md5: fd2bc3367dbe09ea6de7323675064083
+      size: 2417
     params:
       params.yaml:
         load_data:
@@ -14,19 +14,19 @@ stages:
     outs:
     - path: artifacts/downloaded_dataset.csv
       hash: md5
-      md5: 939e49db4a1d26c3906162b456075ae9
-      size: 9937
+      md5: 481bb9f32f35aa611bc61cc431fbdda9
+      size: 10083
   data_split:
-    cmd: python3 src/stages/data_split.py --config=params.yaml
+    cmd: python src/stages/data_split.py --config=params.yaml
     deps:
     - path: artifacts/downloaded_dataset.csv
       hash: md5
-      md5: 939e49db4a1d26c3906162b456075ae9
-      size: 9937
+      md5: 481bb9f32f35aa611bc61cc431fbdda9
+      size: 10083
     - path: src/stages/data_split.py
       hash: md5
-      md5: e27efeb5c37b64c64e0974c10913910f
-      size: 2188
+      md5: f5942aeec40026c4dc0bb28081d62def
+      size: 2251
     params:
       params.yaml:
         split_data:
@@ -39,35 +39,35 @@ stages:
     outs:
     - path: artifacts/split_test_dataset.csv
       hash: md5
-      md5: 54fc811767361c5cb9da4939de9e765a
-      size: 2065
+      md5: bf537aa0107151295a9a4d7c41101de9
+      size: 2088
     - path: artifacts/split_train_dataset.csv
       hash: md5
-      md5: 97eb6493105574892ab831b26ed6b3de
-      size: 7121
+      md5: a668e914de922f0cd9cf44313ec410b6
+      size: 7223
     - path: artifacts/split_val_dataset.csv
       hash: md5
-      md5: 6ee2dfd638f8bdc32e3f819a16dbc7a1
-      size: 2065
+      md5: 7d6c547f1b8536e4fa44417e47eaef9b
+      size: 2088
   features_transform:
-    cmd: python3 src/stages/features_transform.py --config=params.yaml
+    cmd: python src/stages/features_transform.py --config=params.yaml
     deps:
     - path: artifacts/split_test_dataset.csv
       hash: md5
-      md5: 54fc811767361c5cb9da4939de9e765a
-      size: 2065
+      md5: bf537aa0107151295a9a4d7c41101de9
+      size: 2088
     - path: artifacts/split_train_dataset.csv
       hash: md5
-      md5: 97eb6493105574892ab831b26ed6b3de
-      size: 7121
+      md5: a668e914de922f0cd9cf44313ec410b6
+      size: 7223
     - path: artifacts/split_val_dataset.csv
       hash: md5
-      md5: 6ee2dfd638f8bdc32e3f819a16dbc7a1
-      size: 2065
+      md5: 7d6c547f1b8536e4fa44417e47eaef9b
+      size: 2088
     - path: src/stages/features_transform.py
       hash: md5
-      md5: 3639ce4f4ddc4718946b854e82870102
-      size: 4573
+      md5: ce4c40ace4e70bbb011e9b6195d972b3
+      size: 4724
     params:
       params.yaml:
         features:
@@ -77,35 +77,35 @@ stages:
     outs:
     - path: artifacts/features_test_dataset.csv
       hash: md5
-      md5: 486b0f8d5cccfa5deeed0e72fe9e5c5c
-      size: 5723
+      md5: ae8b2721a77a1bb53f8a53f6c463b7f2
+      size: 5746
     - path: artifacts/features_train_dataset.csv
       hash: md5
-      md5: 732be5404fdba953b017f81b60719c4e
-      size: 25631
+      md5: e7e8c9e810942d7daf0abf66a71c91e9
+      size: 25733
     - path: artifacts/features_val_dataset.csv
       hash: md5
-      md5: bdaa307c8b7dfe1e917e948b7b0b30d3
-      size: 5723
+      md5: 10991364b177a9babffc6ad1269c4fb0
+      size: 5746
   train:
-    cmd: python3 src/stages/train_model.py --config=params.yaml
+    cmd: python src/stages/train_model.py --config=params.yaml
     deps:
     - path: artifacts/features_test_dataset.csv
       hash: md5
-      md5: 486b0f8d5cccfa5deeed0e72fe9e5c5c
-      size: 5723
+      md5: ae8b2721a77a1bb53f8a53f6c463b7f2
+      size: 5746
     - path: artifacts/features_train_dataset.csv
       hash: md5
-      md5: 732be5404fdba953b017f81b60719c4e
-      size: 25631
+      md5: e7e8c9e810942d7daf0abf66a71c91e9
+      size: 25733
     - path: artifacts/features_val_dataset.csv
       hash: md5
-      md5: bdaa307c8b7dfe1e917e948b7b0b30d3
-      size: 5723
+      md5: 10991364b177a9babffc6ad1269c4fb0
+      size: 5746
     - path: src/stages/train_model.py
       hash: md5
-      md5: c424895cc903f687144ae3660d6d2747
-      size: 1557
+      md5: b8453ed105a12b431205504cca08c515
+      size: 1619
     params:
       params.yaml:
         train:
@@ -118,31 +118,31 @@ stages:
     outs:
     - path: artifacts/model_test1.pkl
       hash: md5
-      md5: 4f2866bf0362edf88c8d6b45c18f49b1
-      size: 736304
+      md5: db8e6b66b14056cbb08c587f03c8889b
+      size: 735681
   evaluate:
-    cmd: python3 src/stages/evaluate.py --config=params.yaml
+    cmd: python src/stages/evaluate.py --config=params.yaml
     deps:
     - path: artifacts/features_test_dataset.csv
       hash: md5
-      md5: 486b0f8d5cccfa5deeed0e72fe9e5c5c
-      size: 5723
+      md5: ae8b2721a77a1bb53f8a53f6c463b7f2
+      size: 5746
     - path: artifacts/features_train_dataset.csv
       hash: md5
-      md5: 732be5404fdba953b017f81b60719c4e
-      size: 25631
+      md5: e7e8c9e810942d7daf0abf66a71c91e9
+      size: 25733
     - path: artifacts/features_val_dataset.csv
       hash: md5
-      md5: bdaa307c8b7dfe1e917e948b7b0b30d3
-      size: 5723
+      md5: 10991364b177a9babffc6ad1269c4fb0
+      size: 5746
     - path: artifacts/model_test1.pkl
       hash: md5
-      md5: 4f2866bf0362edf88c8d6b45c18f49b1
-      size: 736304
+      md5: db8e6b66b14056cbb08c587f03c8889b
+      size: 735681
     - path: src/stages/evaluate.py
       hash: md5
-      md5: 1722c921a01e0efd1820d6b5587705d0
-      size: 2785
+      md5: 4340f3ed76ae9150494ad6dc74d8b718
+      size: 2882
     params:
       params.yaml:
         evaluate:
@@ -151,9 +151,9 @@ stages:
     outs:
     - path: artifacts/confusion_matrix.png
       hash: md5
-      md5: ce7a93a48d2ad8916366e8a935a5e94e
-      size: 20226
+      md5: fd03331972dc9ccbf5861e0f5e4544dd
+      size: 21239
     - path: artifacts/metrics.json
       hash: md5
-      md5: a417f63cc55bbae9964ae773d2ffa124
+      md5: 49e0194f3ddeb689c13f9b154d92741e
       size: 86
