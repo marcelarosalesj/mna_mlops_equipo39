@@ -1,0 +1,10 @@
+services:
+  model_service:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_PATH=/app/artifacts/model.pkl
+    volumes:
+      - .:/app
+

@@ -1,11 +1,11 @@
 import argparse
 import numpy as np
 import pandas as pd
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder, LabelEncoder, OrdinalEncoder
 
 from src.utils import read_config_params
+from src.utils_features_transform import create_pipeline
+
+from sklearn.preprocessing import LabelEncoder
 
 
 def _encode_target(y_train, y_test, y_val):
@@ -25,63 +25,15 @@ def _encode_features(X_train, X_test, X_val):
     """
     Run encodeing pipeline for features
     """
-    catNOM_pipeline = Pipeline(
-        steps=[
-            (
-                "OneHot",
-                OneHotEncoder(
-                    drop="first", sparse_output=False, handle_unknown="ignore"
-                ),
-            )
-        ]
-    )
-    catORD_pipeline = Pipeline(steps=[("Ordinal", OrdinalEncoder())])
-
-    catNOM_pipeline_nombres = [
-        "Sex",
-        "Graduated High-school Type",
-        "Scholarship Type",
-        "Additional Work",
-        "Regular Artistic/Sports Activity",
-        "Do you have a Partner",
-        "Transportation",
-        "Accommodation in Cyprus",
-        "Mothers Education",
-        "Fathers Education",
-        "Parental Status",
-        "Mothers Occupation",
-        "Fathers Occupation",
-        "Attendance to Seminars",
-        "Impact on Success",
-        "Attendance to Classes",
-        "Preparation to Midterm 1",
-        "Preparation to Midterm 2",
-        "Taking Notes in Classes",
-        "Listening in Classes",
-        "Discussion Improves Success",
-        "Flip-Classroom",
-    ]
-    catORD_pipeline_nombres = [
-        "Student Age",
-        "Number of Siblings",
-        "Total Salary",
-        "Weekly Study Hours",
-        "Reading Frequency (Non-Scientific)",
-        "Reading Frequency (Scientific)",
-        "Cumulative GPA Last Semester",
-        "Expected GPA at Graduation",
-        "Student Age",
-        "Number of Siblings",
-    ]
-
-    pipeline = ColumnTransformer(
-        transformers=[
-            ("OHE", catNOM_pipeline, catNOM_pipeline_nombres),
-            ("Ordinal", catORD_pipeline, catORD_pipeline_nombres),
-        ]
-    )
+    pipeline = create_pipeline()
 
     X_train = pipeline.fit_transform(X_train)
+
+    import pickle
+
+    with open("artifacts/model_pipeline.pkl", "wb") as f:
+        pickle.dump(pipeline, f)
+
     X_test = pipeline.transform(X_test)
     X_val = pipeline.transform(X_val)
 
